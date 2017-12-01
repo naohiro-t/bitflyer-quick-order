@@ -1,0 +1,27 @@
+.col-md-12
+  = form_tag trade_path,  method: 'get', id: 'queue-push-form' do
+    .form-group.row.text-center.col-md-6
+      .col-md-8
+        = text_field_tag :size, "", placeholder: 'size', autofocus: true, |
+          class: 'form-control search-box input-md'                                            |
+      .col-md-4
+        / = link_to (button_tag "BUY", type: 'button'), { controller: :dashboard, action: :buy }
+        / # = link_to (button_tag "SELL", type: :submit), { controller: :dashboard, action: :sell }
+        / = button_to "SELL", some_path, method: :get, params: { size: 3.mont }
+        = submit_tag "BUY" 
+        = submit_tag "SELL" 
+        = submit_tag "CLOSE"
+
+
+/ .col-md-12
+/   = form_for 'trade' do |f|
+/     .form-group.row.text-center.col-md-6
+/       .col-md-8
+/         .field
+/           = f.label :size
+/           = f.text_field :size
+/         /= text_field_tag :keyword, "", placeholder: 'keywords', autofocus: true, |
+/          / class: 'form-control search-box input-md'                                            |
+/       .col-md-4
+/         = button_tag(type: :submit, class: 'btn btn-md btn-success') do
+/           Check json object
