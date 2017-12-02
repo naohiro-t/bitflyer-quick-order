@@ -50,9 +50,9 @@ class BitFlyer
     if size == 0 #no position
       return false 
     elsif side == "SELL" #holding short
-      order_child("MARKET", "BUY", size, price)
+      order_child("MARKET", "BUY", size)
     elsif side == "BUY" #holding long
-      order_child("MARKET", "SELL", size, price)
+      order_child("MARKET", "SELL", size)
     end
     return true # close completed
   end
