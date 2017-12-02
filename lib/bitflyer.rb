@@ -23,14 +23,14 @@ class BitFlyer
 
   def buy(size)
     ticker = get_ticker
-    price = ticker["best_bid"].to_i + 1
+    price = ticker["best_bid"].to_i + 100
     order_id = order_child("LIMIT", "BUY", size, price)
     confirm_order(order_id)
   end
 
   def sell(size)
     ticker = get_ticker
-    price = ticker["best_ask"].to_i - 1
+    price = ticker["best_ask"].to_i - 100
     order_id = order_child("LIMIT", "SELL", size, price)
     confirm_order(order_id)
   end
