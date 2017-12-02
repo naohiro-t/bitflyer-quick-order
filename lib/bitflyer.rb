@@ -2,10 +2,8 @@
 
 require 'net/http'
 require 'uri'
-require 'dotenv/load'
 require 'openssl'
 require 'json'
-require 'byebug'
 
 class BitFlyer
   def initialize#(size, confirm_line, loss_cut_line)
