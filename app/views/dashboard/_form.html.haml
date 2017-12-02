@@ -2,7 +2,7 @@
   = form_tag trade_path,  method: 'get', id: 'queue-push-form' do
     .form-group.row.text-center.col-md-6
       .col-md-8
-        = text_field_tag :size, "", placeholder: 'size', autofocus: true, |
+        = text_field_tag :size, "0.1", placeholder: 'size', autofocus: true, |
           class: 'form-control search-box input-md'                                            |
       .col-md-4
         / = link_to (button_tag "BUY", type: 'button'), { controller: :dashboard, action: :buy }
