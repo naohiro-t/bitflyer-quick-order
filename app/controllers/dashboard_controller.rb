@@ -44,13 +44,21 @@ class DashboardController < ApplicationController
     end
 
     def buy(size)
-      @bitfly.buy(size)
-      redirect_to root_url, notice: 'You bought it!!' #flash: { success: "You bought it!!" }#flash[:success] = 'Your bought!'
+      completed = @bitfly.buy(size)
+      if completed
+        redirect_to root_url, notice: 'You bought it!!' #flash: { success: "You bought it!!" }#flash[:success] = 'Your bought!'
+      else
+        redirect_to root_url, alert: 'Tried 3 times but failed to complete it!!' #flash: { success: "You bought it!!" }#flash[:success] = 'Your bought!'
+      end
     end
 
     def sell(size)
-      @bitfly.sell(size)
-      redirect_to root_url, notice: 'You sold it!!'
+      completed = @bitfly.sell(size)
+      if completed
+        redirect_to root_url, notice: 'You sold it!!' #flash: { success: "You bought it!!" }#flash[:success] = 'Your bought!'
+      else
+        redirect_to root_url, alert: 'Tried 3 times but failed to complete it!!' #flash: { success: "You bought it!!" }#flash[:success] = 'Your bought!'
+      end
     end
 
     def close

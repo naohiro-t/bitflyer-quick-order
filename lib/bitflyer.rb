@@ -23,14 +23,14 @@ class BitFlyer
 
   def buy(size)
     ticker = get_ticker
-    price = ticker["best_bid"].to_i + 500
+    price = ticker["best_bid"].to_i + 5
     order_id = order_child("LIMIT", "BUY", size, price)
     confirm_order(order_id)
   end
 
   def sell(size)
     ticker = get_ticker
-    price = ticker["best_ask"].to_i - 500
+    price = ticker["best_ask"].to_i - 5
     order_id = order_child("LIMIT", "SELL", size, price)
     confirm_order(order_id)
   end
@@ -39,13 +39,10 @@ class BitFlyer
     positions = get_position
     size = 0.0
     side = ""
-    puts positions
-    # positions.each do |position|
-    #   side = position['side']
-    # end
     positions.each do |position|
+      puts position
       side = position['side']
-      size = size + position['size'].to_f
+      size += position['size'].to_f
     end
     if size == 0 #no position
       return false 
@@ -126,68 +123,41 @@ class BitFlyer
     end
   end
 
+  # This method makes sure if the order is completed.
+  # 1. check if it has order
   def confirm_order(order_id)
     p "Just making sure if the order is completed"
+    try_count = 0
     loop do
-      sleep(2)
-      open_order = get_open_child_order
+      try_count += 1
+      puts try_count
+      sleep(1)
+      open_orders = get_open_child_order
       position_check = get_position
-      # last_trade = test.get_child_order_detail(order_id["child_order_acceptance_id"])
-      # p open_order
-      if open_order.empty?
+      puts position_check
+      if open_orders.empty? && !position_check.empty?
         puts "REQUESTED ORDER IS COMPLETED"
         break
+      elsif try_count > 3
+        puts "failed to complete order...may need to consider to change order logic"
+        cancel_all(open_orders)
+        return false
       else
-        open_order_num = 0
-        open_order.each do |order|
-          open_order_num += 1
-          # p open_order_num
-          cancel_order(order["child_order_acceptance_id"], "child")
-        end
-        sleep(2)
+        cancel_all(open_orders)
+        sleep(1)
         cancel_check = get_open_child_order
         position_check = get_position
-        # p "This is open orders"
-        # p cancel_check
-        # p "This is positions"
-        # p position_check
-        if cancel_check.empty? && position_check.count < 2
-          order_id = reorder_after_cancel(open_order[0])
-          # puts "REORDERING"
-          # p order_id
+        if cancel_check.empty? && position_check.empty?
+          order_id = reorder_after_cancel(open_orders[0])
         end
       end
     end
-    # p order_id
     order_id
   end
 
-  # return order id
-  # {"child_order_acceptance_id": "JRF20150707-050237-639234"}
-  def initial_trade_from_console
-    puts "Select order type \'MARKET\' or \'LIMIT\' "
-    puts "1. BUY with hightest bid 2. SELL with lowest ask 3. LIMIT BUY 4. LIMIT SELL 5. MARKET BUY 6. MARKET SELL"
-    order_num = gets
-    if order_num.chomp == "1"
-      ticker = get_ticker
-      price = ticker["best_bid"].to_i + 1
-      order_child("LIMIT", "BUY", @size, price)
-    elsif order_num.chomp == "2"
-      ticker = get_ticker
-      price = ticker["best_ask"].to_i - 1
-      order_child("LIMIT", "SELL", @size, price)
-    elsif order_num.chomp == "3"
-      puts "select order price"
-      price = gets
-      order_child("LIMIT", "BUY", @size, price.chomp)
-    elsif order_num.chomp == "4"
-      puts "select order price"
-      price = gets
-      order_child("LIMIT", "SELL", @size, price.chomp)
-    elsif order_num.chomp == "5"
-      order_child("MARKET", "BUY", @size)
-    elsif order_num.chomp == "6"
-      order_child("MARKET", "SELL", @size)
+  def cancel_all(open_orders)
+    open_orders.each do |order|
+      cancel_order(order["child_order_acceptance_id"], "child")
     end
   end
 
@@ -197,9 +167,9 @@ class BitFlyer
     size = last_trade["size"]
     ticker = get_ticker
     if side == "BUY"
-      price = ticker["best_bid"].to_i + 1
+      price = ticker["best_bid"].to_i + 100
     elsif side == "SELL"
-      price = ticker["best_ask"].to_i - 1
+      price = ticker["best_ask"].to_i - 100
     end
     order_child(order_type, side, size, price)
   end
