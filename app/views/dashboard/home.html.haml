@@ -3,11 +3,36 @@
 = render 'flash'
 
 %h2 Positions
-- @positions.each do |position|
-  = position
+
+- if @positions
+  %table{:border => "1"}
+    %thead
+      %tr
+        %th SIDE
+        %th PRICE
+        %th SIZE
+        %th REQUIRE COLLATERAL
+        %th PROFIT and LOSS
+      %tr  
+    %tbody
+      - @positions.each do |position| 
+        %tr
+          %td= position['side']
+          %td= position['price']
+          %td= position['size']
+          %td= position['require_collateral']
+          %td= position['pnl'] 
 
 %h2 Ticker
-%li Best bid
-= @ticker['best_bid']
-%li Best ask
-= @ticker['best_ask']
+%table{:border => "1"}
+  %thead
+    %tr
+      %th BEST ASK
+      %th BEST BID
+      %th DIFF
+  %tbody
+    %tr
+      %td= @ticker['best_ask']
+      %td= @ticker['best_bid']
+      %td= @ticker['best_ask'] - @ticker['best_bid']
+

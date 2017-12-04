@@ -442,6 +442,7 @@ class BitFlyer
     end
   end
 
+  # {"product_code"=>"FX_BTC_JPY", "side"=>"SELL", "price"=>1404847.0, "size"=>0.001, "commission"=>0.0, "swap_point_accumulate"=>0.0, "require_collateral"=>93.65646666666666, "open_date"=>"2017-12-04T09:34:36.533", "leverage"=>15.0, "pnl"=>-1.154}
   def get_position
     @uri.path = "/v1/me/getpositions"
     @uri.query = "product_code=FX_BTC_JPY"
