@@ -1,3 +1,13 @@
 %h1 Always be patient to make tons of money!!
 = render 'form'
 = render 'flash'
+
+%h2 Positions
+- @positions.each do |position|
+  = position
+
+%h2 Ticker
+%li Best bid
+= @ticker['best_bid']
+%li Best ask
+= @ticker['best_ask']

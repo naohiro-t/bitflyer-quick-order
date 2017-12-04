@@ -3,6 +3,8 @@ class DashboardController < ApplicationController
   before_action :set_agent
 
   def home
+    @ticker = @bitfly.get_ticker
+    @positions = @bitfly.get_position
   end
 
   def buy
